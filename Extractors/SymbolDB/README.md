@@ -10,6 +10,8 @@ SymbolDB
 
         SymbolCollector.py --imagedir="Path\To\Your\Image\Folder"  --symbolset=NameOfSymbolSet -database="SymbolCollector.db
 
+- the DB is a sqllite database
+
 **NB:**
 
 - symbolset should be one word
