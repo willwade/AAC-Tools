@@ -4,6 +4,10 @@
 
 # -*- coding: iso-8859-15 -*-
 
+# Utils
+import sys
+sys.path.append('../utils')
+
 """ Wordlist Metrics.
 """
 import os.path, errno,re
@@ -77,6 +81,8 @@ def writeOut(lsummary_out, allwordsphrases=[],  outputpath='.', gridset=''):
        item_count = allwordsphrases.count(item)
        if num_words == 1:                          # Single word
           word_type = nltk.pos_tag(item)[-1][-1]
+          #word_type_help = nltk.help.upenn_tagset(word_type)
+# MAYBE CONVERT TAGS INTO MORE USEFUL WORDS?!
           ldata_out.writerow([item, str(num_words), str(item_count), word_type])
           uwords.append(item)
           wordtypes.append(word_type)
@@ -130,6 +136,9 @@ def usage():
     -w, --wordlistdir   - Folder path of wordlist.xml or xml files to scan.
     -o, --output        - Directory to store output csv
     -a                  - Search for ANY xml file, not just wordlist.xml
+    
+    e.g.
+    python wordlistMetrics.py --wordlistdir="../temp/IDV/" --output="../output/"
     
     Requirements:
     Python 2.3, Lxml, unicodecsv
