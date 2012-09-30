@@ -15,8 +15,10 @@ def parse_images(imagedir, sqlitefile, symbolset):
             # SymmbolName: strip .emf, .wmf, .png .jpg .jpeg, from file
             #   replace _ - with SPACE             
             SymbolName = os.path.splitext(n)[0]
-            # keywords = file path words (minus numbers and any 7-7 pattern) plus SymbolBane 
-            SQLInsert = SQLInsert + 'INSERT INTO ss' + symbolset +' VALUES ('+str(a)+',"'+SymbolName+'","'+r+'/'+n+'","NA"); '
+            # keywords = file path words (minus numbers and any 7-7 pattern) plus SymbolBane             
+            parts = r[len(imagedir):].split('/')
+            partsTxt = ','.join(parts)
+            SQLInsert = SQLInsert + 'INSERT INTO ss' + symbolset +' VALUES ('+str(a)+',"'+SymbolName+'","'+r+'/'+n+'","'+ partsTxt +'"); '
             a=a+1
     try:
         connection = sqlite3.connect(sqlitefile)
@@ -58,7 +60,7 @@ def usage():
     
 
     Example Usage:
-    SymbolCollector.py --imagedir="Path\To\Your\Image\Folder"  --symbolset=Widgit -database=''SymbolCollector.db" 
+    SymbolCollector.py --imagedir="Path\To\Your\Image\Folder"  --symbolset=Widgit -database="SymbolCollector.db" 
     
     Requirements:
     Python 2.3, Lxml, unicodecsv

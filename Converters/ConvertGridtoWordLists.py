@@ -10,11 +10,10 @@ import sys
 sys.path.append('../utils')
 
 
-""" Grid Hacker.
+""" Grid to Wordlist.
 - Export Grids as CSV files for analysis. Seperate files or One file. set location of where
 - Export grids as wordlist files - pass flag to rewrite all the grids as wordlist Grids
  (NB Pass the -excludecommon and -excludewords to exclude common and your own wordlists to convert. Useful for template pages)
-- Convert symbol-system. Will take the word. Look up in the image dictionary the closest symbol and rewrite any following licenced symbol area. 
 """
 import pdb
 import os.path, errno, re
@@ -74,9 +73,9 @@ def parse_grids(gridxml='grid.xml',outputpath='.',userdir='.',
                     
                     if (outinplace):                                # Check to see if output directory specified, if not output to the Grid directories.
                         outputpath = r + '/'
-                    tree = etree.parse(pth)                         # Parse the file
+                    parser = etree.XMLParser(strip_cdata=False)
+                    tree = etree.parse(pth, parser)                 # Parse the file
                     if(tree.xpath(".//licencekey") == []):          # does it have a licencekey? Bugger if it has 
-## NOT SURE ABOUT THIS TEST... ???? SJ
                         readpictures = True
                     else:
                         readpictures = False                        # So this grid is licenced. Dont try and read the pictures
@@ -96,8 +95,7 @@ def parse_grids(gridxml='grid.xml',outputpath='.',userdir='.',
                         
                         for wordx in root.iterfind("word"):     # MORE EFFICIENT METHOD???
                             if outputwordlists:
-                                wordlist.append(wordx)
-# HOW TO MAKE IT CDATA?
+                                wordlist.append(wordx)          # HOW TO MAKE IT CDATA?
                             if outputcsv:
                                 vocabWriter.writerow([pth,"wordlist","wordlist",str(wordx.findtext("wordtext")),str(wordx.findtext("picturefile"))])
    
