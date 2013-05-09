@@ -48,7 +48,7 @@ def parse_pixfile(pixfile, sqlitefile, symbolset):
             partsTxt = parts[0]
             name = parts[1][:-4]
             location = bits[1]
-            print "name: %s, locn: %s, parts: %s" % (name, location, partsTxt)        
+            #print "name: %s, locn: %s, parts: %s" % (name, location, partsTxt)        
             SQLInsert = SQLInsert + 'INSERT INTO ss' + symbolset +' VALUES ('+str(a)+',"'+name+'","'+location+'","'+ partsTxt +'"); '
             a=a+1        
         except:
@@ -87,11 +87,6 @@ def readable_dir(prospective_dir):
     raise Exception("readable_dir:{0} is not a readable dir".format(prospective_dir))
 
 
-def main():
-    imagedir='.'
-    sqlitefile ='SymbolCollector.db'
-    symbolset='Widgit'
-
 parser = argparse.ArgumentParser(prog='SymbolCollector',description='Collects information regarding a directory of symbols or a pix file to a database')
 # Basics
 parser.add_argument('--verbose','-v', type=bool, default=True, help='Verbose output True/False. Default: True')
@@ -114,6 +109,3 @@ else:
     imagedir = args.imagedir
     if imagedir:
         parse_images(imagedir, sqlitefile, symbolset)
-    
-if __name__ == "__main__":
-    main()
