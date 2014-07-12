@@ -1,5 +1,13 @@
 #Potential useful lines of NLTK for AAC#
 
+This is really a collection of short notes from the [NLTK book](http://nltk.org/book). Find more info there.
+
+##Glossary##
+
+* set: set up a list of words from text. Creates unique list
+* bigrams: extracts text as word-pairs. 
+* collocation: A collocation is a sequence of words that occur together unusually often. Thus red wine is a collocation, whereas the wine is not. A characteristic of collocations is that they are resistant to substitution with words that have similar senses; for example, maroon wine sounds definitely odd. Think of these as frequent bigrams. 
+
 
 * To find the number of unique words in a block of text
 
@@ -49,4 +57,5 @@
     V = set(text1)
     long_words = [w for w in V if len(w) > 15]
     sorted(long_words)
+
     
