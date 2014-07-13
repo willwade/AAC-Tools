@@ -1,5 +1,8 @@
 #Set User Inputs#
 
+[Download it here](http://script-exes.s3.amazonaws.com/SetUserInputsGUI.exe)
+
+
 ##The problem##
 
 You use [The Grid 2 software](http://sensorysoftware.com/grid-software-for-aac/grid2_aac_software/) and you want to use a number of different users. The problem is that your access method is the same for each user and you have to remember to set the same user settings for each new user. This is quite a pain - particularly in assessment centres as remembering to change, and keeping a track of each user is a bit of a pain.
@@ -17,4 +20,5 @@ It looks for your Grid 2 User directory, asks you to choose a user whose Access 
         C:\Users\Public\Documents\Sensory Software\The Grid 2\Users
 
 Any issues feel free to send them to Will @ ACE and I will try and fix (but if your Grid stops working I can't take responsibility! See NB2!)
+
 
