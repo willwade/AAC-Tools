@@ -5,7 +5,7 @@
 
 ##The problem##
 
-You use [The Grid 2 software](http://sensorysoftware.com/grid-software-for-aac/grid2_aac_software/) and you want to use a number of different users. The problem is that your access method is the same for each user and you have to remember to set the same user settings for each new user. This is quite a pain - particularly in assessment centres as remembering to change, and keeping a track of each user is a bit of a pain.
+You use [The Grid 2 software](http://sensorysoftware.com/grid-software-for-aac/grid2_aac_software/) and you want to use a number of different users. The problem is that your access method is the same for each user and you have to remember to set the same user settings for each new user. This can be a little time consuming.. and when you have lots of users a pain.
 
 ##What does this little application do?##
 It looks for your Grid 2 User directory, asks you to choose a user whose Access (Input method) settings you want to copy. It then copies the selected User settings to all the rest. 
