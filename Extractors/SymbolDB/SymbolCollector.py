@@ -5,7 +5,8 @@
 
 # Convert folder of images to a sqllite database so can use it for symbol lookups
 
-import os.path, getopt, sys, sqlite3
+import os.path, sys, sqlite3
+import argparse
 
 def parse_images(imagedir, sqlitefile, symbolset):
     SQLInsert = ''
@@ -30,7 +31,39 @@ def parse_images(imagedir, sqlitefile, symbolset):
     except sqlite3.Error, e:
         print "Error %s:" % e.args[0]
         sys.exit(1)
-                
+
+def parse_pixfile(pixfile, sqlitefile, symbolset):
+    # a pix file looks like lines of :
+    # b\bookmark.wmf=[MJPCS#]6523.wmf
+    # simply split at =                
+    lines = pixfile.readlines()
+    SQLInsert = ''
+    a = 1;
+    for line in lines:
+        bits = line.strip().split('=')
+        print 'name:'+bits[0]
+        #keywords
+        try:
+            parts = bits[0].split('\\')
+            partsTxt = parts[0]
+            name = parts[1][:-4]
+            location = bits[1]
+            #print "name: %s, locn: %s, parts: %s" % (name, location, partsTxt)        
+            SQLInsert = SQLInsert + 'INSERT INTO ss' + symbolset +' VALUES ('+str(a)+',"'+name+'","'+location+'","'+ partsTxt +'"); '
+            a=a+1        
+        except:
+            print 'failure'
+
+    try:
+        connection = sqlite3.connect(sqlitefile)
+        cur = connection.cursor()  
+        cur.executescript(SQLInsert)
+        connection.commit()
+        print str(a)+" images inserted into ss"+symbolset+" of "+sqlitefile
+    
+    except sqlite3.Error, e:
+        print "Error %s:" % e.args[0]
+        sys.exit(1)
     
 def setup_db(sqlitefile, symbolset):
     try:
@@ -45,65 +78,34 @@ def setup_db(sqlitefile, symbolset):
         sys.exit(1)
 
 
-def usage():
-    print """
-    This program takes a directory of images and builds a sqllite database from the images
-    To then be used in other AAC Tools
-    NB: deletes the Table each time. Be careful to name your SymbolSet properly
-    
-    Flags:
-    -h, --help          - This screen
-    -v                  - Verbose (debug)
-    -i, --imagedir=      - File path of the image Folder you want to analyse
-    -s, --symbolset=     - Name of the symbolset (NB: No spaces or funny Characters please!)
-    -d, --database=      - Name of the sqlite database 
-    
-
-    Example Usage:
-    SymbolCollector.py --imagedir="Path\To\Your\Image\Folder"  --symbolset=Widgit -database="SymbolCollector.db" 
-    
-    Requirements:
-    Python 2.3, Lxml, unicodecsv
-    
-    Author:
-    Will Wade, will@e-wade.net
-    """              
+def readable_dir(prospective_dir):
+  if not os.path.isdir(prospective_dir):
+    raise Exception("readable_dir:{0} is not a valid path".format(prospective_dir))
+  if os.access(prospective_dir, os.R_OK):
+    return prospective_dir
+  else:
+    raise Exception("readable_dir:{0} is not a readable dir".format(prospective_dir))
 
 
-def main():
-    imagedir='.'
-    sqlitefile ='SymbolCollector.db'
-    symbolset='Widgit'
+parser = argparse.ArgumentParser(prog='SymbolCollector',description='Collects information regarding a directory of symbols or a pix file to a database')
+# Basics
+parser.add_argument('--verbose','-v', type=bool, default=True, help='Verbose output True/False. Default: True')
+parser.add_argument('--database','-d', type=str, default='SymbolCollector.db', help='Location of the SQLLite database file. Default: .SymbolCollector.db')
+parser.add_argument('--symbolset','-s', type=str, default='', help='Whats the name of the symbol set? NB: This creates a table with this name')
+parser.add_argument('--imagedir','-i', type=readable_dir, help='Locate the directory with the images to pass. NB: If pix file given this is ignored.')      
+parser.add_argument('--pixfile', type=argparse.FileType('r'), help='Read data from a file')
+args = parser.parse_args() 
 
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hivsd", ["help", "imagedir=","sqlitefile=","symbolset=","database="])
-    except getopt.GetoptError, err:
-        # print help information and exit:
-        print str(err) # will print something like "option -a not recognized"
-        usage()
-        sys.exit(2)
-    output = None
-    verbose = False
-    for o, a in opts:
-        if o == "-v":
-            verbose = True
-        elif o in ("-h", "--help"):
-            usage()
-            sys.exit()
-        elif o in ("-s", "--symbolset"):
-            symbolset = str(a)        
-        elif o in ("-d", "--database"):
-            sqlitefile = str(a)           
-        elif o in ("-i", "--imagedir"):            
-            if os.path.exists(os.path.normpath(a) + '/'):
-                imagedir = os.path.normpath(a) + '/'
-            else:
-                assert False, "non-existent user directory: " + os.path.normpath(a) + '/'
-        else:
-            assert False, "unhandled option"
-    
-    setup_db(sqlitefile, symbolset)
-    parse_images(imagedir, sqlitefile, symbolset)
-    
-if __name__ == "__main__":
-    main()
+verbose = args.verbose
+symbolset = args.symbolset        
+sqlitefile = args.database
+
+setup_db(sqlitefile, symbolset)
+
+pixfile = args.pixfile
+if pixfile:
+    parse_pixfile(pixfile, sqlitefile, symbolset)
+else:
+    imagedir = args.imagedir
+    if imagedir:
+        parse_images(imagedir, sqlitefile, symbolset)
