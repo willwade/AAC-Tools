@@ -2,27 +2,16 @@
 # -*- coding: cp1252 -*-
 # Contact: Will Wade <will@e-wade.net>
 # Date: July 2014
-
+# Binary: pyinstaller.py --icon=SetUserInputsGui/icon_256px.ico --onefile --nowindow --noconsole SetUserInputsGUI.py
 # -*- coding: iso-8859-15 -*-
 """
 SetUserInputs. Copy one Grid 2 user input methods to all the rest.  
-
-usage: SetUserInputs [-u] [--userdir=DIR] [--griddir=GRIDDIR] 
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show the version number of this script and exit
-  --userdir=DIR         Allow from one or several ip-address. [default: .]
-  --griddir=GRIDDIR        Change the default Mind Express Port number. [default: C:/Users/Documents/Whatever]
-  
 """
 from easygui import *
 # For the line command aspects
-import pdb
 import sys
-import os.path, errno, re
+import os.path
 from lxml import etree
-from lxml import objectify
 
 readme = """
 This application simply looks for your Grid 2 Users directory (where all the raw data is held on your grid bundles) and then asks you to select a user to base all other users Input methods on.
@@ -63,6 +52,8 @@ def findPotentialDirs(dirs={}):
                         found = True
                         if dir not in foundDirs:                
                             foundDirs.append(dir)
+                        # This may speed things up a bit.. 
+                        break
     return found, foundDirs
                     
 def parseUserInputXML(userDir):
@@ -124,10 +115,6 @@ def getUsers(dirs={}):
             
 if __name__ == '__main__':
 
-    #inputXML = parseUserInputXML(args['--userdir'])
-    # Now find other directories and copy it
-    #writeUserInput(inputXML, args['--griddir'],args['--userdir'])
-    # This should get all the User dirs in the Grid 2 dir. Provide all possible 
     textbox('',"Grid 2 User Input copier",readme)
     found, userdirs = findPotentialDirs({os.path.normpath("C:\Users\Public\Documents\Sensory Software\The Grid 2\Users"),os.path.normpath("/Users/willwade/bin/AAC-Tools/temp/Grids/")})
     if found:
