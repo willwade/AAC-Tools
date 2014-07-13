@@ -24,18 +24,45 @@ import os.path, errno, re
 from lxml import etree
 from lxml import objectify
 
+readme = """
+This application simply looks for your Grid 2 Users directory (where all the raw data is held on your grid bundles) and then asks you to select a user to base all other users Input methods on.
+
+For example. Say you have a device you have recently setup for one user and you wish that user to use the same access method for all grid bundles on that machine.
+Currently you would have to manually edit each user in the Grid. Now just edit one user, run this tool, select the User you have just edited and then the rest of them will get these settings transferred.
+
+NB: It can take a little while. 
+NB2: Please please backup your users directory if you have any concerns
+NB3: If it can't find your users directory it will ask you to locate it. To find it go to the Grid 2. Go to File menu, then Preferences and look at the "File Locations". You want the field that says 'Location for user files:'
+
+Any issues feel free to send them to Will @ ACE and I will try and fix (but if your Grid stops working I can't take responsibility! See NB2!)
+
+Press OK in the top right to continue.. 
+"""
+
+
+def walklevel(some_dir, level=1):
+    some_dir = some_dir.rstrip(os.path.sep)
+    assert os.path.isdir(some_dir)
+    num_sep = some_dir.count(os.path.sep)
+    for root, dirs, files in os.walk(some_dir):
+        yield root, dirs, files
+        num_sep_this = root.count(os.path.sep)
+        if num_sep + level <= num_sep_this:
+            del dirs[:]
+            
 def findPotentialDirs(dirs={}):
-    """ Looks through a list of potential directories """
+    """ Looks through a list of potential directories. This does seem to take an age """
     found = False
     foundDirs = []
     for dir in dirs:
-        for r,d,f in os.walk(dir): 
-            # is d a potential grid 2 dir?  - look for a settings.xml
-            for files in f:
-                if files.endswith("settings.xml"):
-                    found = True
-                    if dir not in foundDirs:                
-                        foundDirs.append(dir)
+        if os.path.isdir(dir):
+            for r,d,f in walklevel(dir,2): 
+                # is d a potential grid 2 dir?  - look for a settings.xml
+                for files in f:
+                    if files.endswith("settings.xml"):
+                        found = True
+                        if dir not in foundDirs:                
+                            foundDirs.append(dir)
     return found, foundDirs
                     
 def parseUserInputXML(userDir):
@@ -56,7 +83,7 @@ def writeUserInput(inputXML, gridDir, excludeUser=None):
     """ Go through the User Dir and find all settings.xml and write over the new input settings"""
     # Go to the dir and loop through the directories looking for Settings0/settings.xml files
     writeFiles = 0
-    for r,d,f in os.walk(gridDir):                                  
+    for r,d,f in walklevel(gridDir,2):                                  
         page = os.path.split(r)[1]
         for files in f:
 
@@ -83,7 +110,7 @@ def getUsers(dirs={}):
     b = []
     found = False
     for dir in dirs:
-        for r,d,f in os.walk(dir): 
+        for r,d,f in walklevel(dir,2): 
             # is d a potential grid 2 dir?  - look for a settings.xml
             for files in f:
                 if files.endswith("settings.xml"):
@@ -101,17 +128,17 @@ if __name__ == '__main__':
     # Now find other directories and copy it
     #writeUserInput(inputXML, args['--griddir'],args['--userdir'])
     # This should get all the User dirs in the Grid 2 dir. Provide all possible 
-    
-    found, userdirs = findPotentialDirs({os.path.normpath("C:\Users\Public\Documents\Sensory Software\The Grid 2\Users")})
+    textbox('',"Grid 2 User Input copier",readme)
+    found, userdirs = findPotentialDirs({os.path.normpath("C:\Users\Public\Documents\Sensory Software\The Grid 2\Users"),os.path.normpath("/Users/willwade/bin/AAC-Tools/temp/Grids/")})
     if found:
         if len(userdirs) > 1:
             # Ask which dir to choose
             msg ="Which is the user directory you wish to use?"
             title = "Grid2 User Input Copier - Select User directory"
-            userdirs = choicebox(msg, title, dirs)
+            userdirs = choicebox(msg, title, userdirs)
     else:
         #
-        msg = "No usual directories were found for the Grid 2 User settings. Can you locate the User you wish to use?" 
+        msg = "No usual directories were found for the Grid 2 User settings. Can you locate the Users Directory you wish to use?" 
         title = "Please provide a directory"
         msgbox(msg)
         tdir = diropenbox()
@@ -124,9 +151,11 @@ if __name__ == '__main__':
             sys.exit(0)
     # Lets continue
     choices =  getUsers(userdirs)
-    msg ="Choose a User to serve to copy Input methods from"
+    msg ="Choose a User to copy Input methods from"
     title = "Grid2 User Input Copier"
     userDir = choicebox(msg, title, choices)
+    if userDir == None:
+            sys.exit(0)           # user chose Cancel
     # Now use choice as the one to use 
     # Lets double check
     msg = "Warning: The next step will overwrite ALL users with the same Input method. Want to continue? "
