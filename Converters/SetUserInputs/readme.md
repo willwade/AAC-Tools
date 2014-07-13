@@ -12,13 +12,14 @@ It looks for your Grid 2 User directory, asks you to choose a user whose Access 
 
 ##Cautions and notes##
 
+- After running restart the Grid
 - It can take a little while. I'll try and speed this up.. In the meantime if nothing happens in between steps don't fret - something is happening..
 - Please please backup your users directory if you have any concerns
--  If it can't find your users directory it will ask you to locate it. To find it go to the Grid 2. Go to File menu, then Preferences and look at the "File Locations". You want the field that says 'Location for user files:'
+-  If it can't find your users directory it will ask you to locate it. To find it go to the Grid 2. Go to File menu, then Preferences and look at the "File Locations". You want the field that says 'Location for user files:' (NB: I need to add to the list of standard settings locations to make this less of a problem..)
 - If it says it has made the changes and you don't see any difference then its likely due to the fact you have a Users folder somewhere on your machine that is no longer being used. If so just rename the following directories: 
         
         C:\Users\Public\Documents\Sensory Software\The Grid 2\Users
 
-Any issues feel free to send them to Will @ ACE and I will try and fix (but if your Grid stops working I can't take responsibility! See NB2!)
+Any issues feel free to send them to Will @ ACE and I will try and fix (but if your Grid stops working I can't take responsibility!)
 
 
