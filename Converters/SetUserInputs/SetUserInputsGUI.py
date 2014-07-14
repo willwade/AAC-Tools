@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
     textbox('',"Grid 2 User Input copier",readme)
     #/Users/willwade/bin/AAC-Tools/temp/Grids/
-    found, userdirs = findPotentialDirs({os.path.normpath("C:\Users\Public\Documents\Sensory Software\The Grid 2\Users"),os.path.normpath("C:\Documents and Settings\All Users\Sensory Software\The Grid 2\Users"), os.path.normpath(os.path.expanduser('~')+'\Sensory Software\The Grid 2\Users')})
+    found, userdirs = findPotentialDirs({os.path.normpath("C:\Users\Public\Documents\Sensory Software\The Grid 2\Users"),os.path.normpath("C:\Documents and Settings\All Users\Sensory Software\The Grid 2\Users"), os.path.normpath(os.path.expanduser('~')+'\My Documents\Sensory Software\The Grid 2\Users')})
     if found:
         if len(userdirs) > 1:
             # Ask which dir to choose
