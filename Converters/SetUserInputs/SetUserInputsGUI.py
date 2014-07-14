@@ -31,13 +31,13 @@ Press OK in the top right to continue..
 
 def walklevel(some_dir, level=1):
     some_dir = some_dir.rstrip(os.path.sep)
-    assert os.path.isdir(some_dir)
-    num_sep = some_dir.count(os.path.sep)
-    for root, dirs, files in os.walk(some_dir):
-        yield root, dirs, files
-        num_sep_this = root.count(os.path.sep)
-        if num_sep + level <= num_sep_this:
-            del dirs[:]
+    if os.path.isdir(some_dir):
+        num_sep = some_dir.count(os.path.sep)
+        for root, dirs, files in os.walk(some_dir):
+            yield root, dirs, files
+            num_sep_this = root.count(os.path.sep)
+            if num_sep + level <= num_sep_this:
+                del dirs[:]
             
 def findPotentialDirs(dirs={}):
     """ Looks through a list of potential directories. This does seem to take an age """
@@ -117,16 +117,18 @@ if __name__ == '__main__':
 
     textbox('',"Grid 2 User Input copier",readme)
     #/Users/willwade/bin/AAC-Tools/temp/Grids/
-    found, userdirs = findPotentialDirs({os.path.normpath("C:\Users\Public\Documents\Sensory Software\The Grid 2\Users"),os.path.normpath("C:\Documents and Settings\All Users\Sensory Software\The Grid 2\Users"), os.path.normpath(os.path.expanduser('~')+'\My Documents\Sensory Software\The Grid 2\Users')})
+    # os.path.normpath("C:\Documents and Settings\All Users\Documents\Sensory Software\The Grid 2\Users") - this is the same as below.. 
+    found, userdirs = findPotentialDirs({os.path.normpath("C:\Users\Public\Documents\Sensory Software\The Grid 2\Users"), os.path.normpath(os.path.expanduser('~')+'\My Documents\Sensory Software\The Grid 2\Users')})
     if found:
         if len(userdirs) > 1:
             # Ask which dir to choose
             msg ="Which is the user directory you wish to use?"
             title = "Grid2 User Input Copier - Select User directory"
             userdirs = choicebox(msg, title, userdirs)
+            print userdirs
     else:
         #
-        msg = "No usual directories were found for the Grid 2 User settings. Can you locate the Users Directory you wish to use?" 
+        msg = "No usual directories were found for the Grid 2 User settings. Can you locate the Users Directory you wish to use? (See the 'Grid 2 - Preferences - File Locations - User Files')" 
         title = "Please provide a directory"
         msgbox(msg)
         tdir = diropenbox()
@@ -146,7 +148,7 @@ if __name__ == '__main__':
             sys.exit(0)           # user chose Cancel
     # Now use choice as the one to use 
     # Lets double check
-    msg = "Warning: The next step will overwrite ALL users with the same Input method. Want to continue? "
+    msg = "Warning: The next step will overwrite ALL users with the same Input method as '"+userDir+"'. Want to continue? "
     title = "Please Confirm"
     if ccbox(msg, title):     # show a Continue/Cancel dialog
         pass  # user chose Continue
