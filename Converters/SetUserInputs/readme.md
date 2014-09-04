@@ -19,6 +19,7 @@ It looks for your Grid 2 User directory, asks you to choose a user whose Access 
 - If it says it has made the changes and you don't see any difference then its likely due to the fact you have a Users folder somewhere on your machine that is no longer being used. If so just rename the following directories: 
         
         C:\Users\Public\Documents\Sensory Software\The Grid 2\Users
+        C:\\My Documents\Sensory Software\The Grid 2\Users
 
 Any issues feel free to send them to Will @ ACE and I will try and fix (but if your Grid stops working I can't take responsibility!)
 
