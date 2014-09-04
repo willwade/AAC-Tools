@@ -3,9 +3,10 @@
 
 """Grid 2 Language Converter.
 
-To use this tool first create a csv (speadsheet) of all the words in the Grid user by doing a create 
-Then go through each line of this document and in column 2 add the translation. You can tweak this as you go. Whatever you DO NOT change the words in column 1
-Lastly map these changes to the Grid user by doing a convert - supplying the language csv file. 
+To use this tool first run the script with a 'create' command. This creates a csv (speadsheet) of all the words in the Grid user supplied.
+Then go through each line of this document and in column 2 add the translation. You can make your life easier by copying the entire column and pasting it into google.translate.com. Paste the returned text into column two. 
+Lastly map these changes to the Grid user by doing a 'convert' command - supplying the language csv file you have just created.
+NB: There is a way of getting this script to do the google lookup automatically - however I don't recommend it. It's slow and likely to ban you from googles translate server.. 
 
 Usage:
   g2translate.py create <lang_file> <Raw_G2_User_Directory> [-g | --google <lang_code>]   
@@ -21,13 +22,15 @@ Options:
   -h --help                 Show this screen.
   --version                 Show version.
 """
-from docopt import docopt
-
+try:
+    from docopt import docopt
+except ImportError:
+    exit('This script requires that `docopt` library'
+         ' is installed: \n    pip install docopt\n'
+         'https://github.com/docopt/docopt')
 
 import urllib2
-
-import pdb
-import sys, os.path, errno, re, csv, codecs
+import os.path, csv, codecs
 from lxml import etree
 from unicodecsv import UnicodeWriter, UnicodeReader 
 
