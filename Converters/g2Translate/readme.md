@@ -14,7 +14,18 @@ It will convert a Grid 2 User (not bundle - it works on the raw user data) from 
 
 ##Warnings:
 
-- Create a backup (do a 'Save as Grid Bundle") of your user before running this.
+- Create a backup (do a "Save as Grid Bundle") of your user before running this.
 - If you want to rerun it you will need to run on the original user. i.e. Once you have converted it there is NO UNDO!
 - There are some bugs with the file reading of the csv file. Until I get a chance to rewrite this code make sure its a standard CSV (with UTF-8 encoding if your editor gives you that option
 
+
+## The command line tool
+
+
+    Usage:
+      g2translate.py create <lang_file> <Raw_G2_User_Directory> [-g | --google <lang_code>]   
+      g2translate.py convert <lang_file> <Raw_G2_User_Directory>
+      g2translate.py (-h | --help)
+      g2translate.py --version
+
+Note: this does contain a way of automatically getting the language from google. However it takes quite a while.. and you may get banned from Google translate for running it.. 
