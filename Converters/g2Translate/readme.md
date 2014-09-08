@@ -16,7 +16,7 @@ It will convert a Grid 2 User (not bundle - it works on the raw user data) from 
 
 - Create a backup (do a "Save as Grid Bundle") of your user before running this.
 - If you want to rerun it you will need to run on the original user. i.e. Once you have converted it there is NO UNDO!
-- There are some bugs with the file reading of the csv file. Until I get a chance to rewrite this code make sure its a standard CSV (with UTF-8 encoding if your editor gives you that option
+- There are some bugs with the file reading of the csv file. Until I get a chance to rewrite this code make sure its a standard CSV (with UTF-8 encoding if your editor gives you that option)
 
 
 ## The command line tool

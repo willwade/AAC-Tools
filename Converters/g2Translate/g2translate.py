@@ -54,12 +54,11 @@ def translate(to_translate, to_langage="auto", langage="auto"):
 def _add_to_list(finalList, addList):
     for word in addList:
         # Some dodgy characters getting in from somewhere.. 
-        uniword = unicode(word, "UTF-8")
-        uniword = uniword.replace(u"\u00A0", " ")
+        uniword = word.replace(u"\u00A0", " ")
         if uniword not in finalList:
             finalList.append(uniword)
-    return finalList          
-
+    return finalList   
+    
 def get_LangADict(userdir='',output_file='Lang.csv',auto_translate=False,lang_code='es'):
     '''
     Look for wordlist.xml files and grid.xml files
@@ -87,7 +86,7 @@ def get_LangADict(userdir='',output_file='Lang.csv',auto_translate=False,lang_co
     ff = open(output_file, 'wb')
     #ff.write(codecs.BOM_UTF8)
     wordFile = UnicodeWriter(ff)
-    
+        
     for word in wordlist:
         if auto_translate:
             wordFile.writerow([word,translate(word, lang_code)])
