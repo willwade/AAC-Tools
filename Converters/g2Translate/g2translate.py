@@ -86,12 +86,21 @@ def get_LangADict(userdir='',output_file='Lang.csv',auto_translate=False,lang_co
     ff = open(output_file, 'wb')
     #ff.write(codecs.BOM_UTF8)
     wordFile = UnicodeWriter(ff)
-        
+    
+    goog_txt = ''
+    
     for word in wordlist:
         if auto_translate:
             wordFile.writerow([word,translate(word, lang_code)])
         else:
              wordFile.writerow([word,'tbc'])
+    
+    if auto_translate:
+         goog_trs = translate(goog_txt[1:], lang_code)
+         goog_wds = goog_trs.split("|")
+         for n in range (0, len(wordlist)):
+            wordFile.writerow([wordlist[n],goog_wds[n]]) 
+
     return True
 
     # ok lets do it...
