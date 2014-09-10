@@ -12,6 +12,13 @@ It will convert a Grid 2 User (not bundle - it works on the raw user data) from 
 2. Open your created language file and add the translations in to column 2. (It should open in Excel). Save the document as a CSV file format. Don't edit the words in column 1. 
 3. Convert. Pass the tool the Language file and it will then look for any words in column 1 and replace them with the words in column 2. 
 
+Once converted you may have some problems seeing your converted language - particularly languages with non-english characters. To fix this:
+
+1. You need to install the correct language version of the Grid. 
+2. Change the language of the user (User settings - About Me - Change Language..") to the correct language (I should do this in my tool to be honest)
+3. Change the locale of windows for non-unicode programs: http://windows.microsoft.com/en-us/windows/change-system-locale#1TC=windows-7 to the same language (The grid it appears is a bit rough around the edges on Unicode..)
+
+
 ##Warnings:
 
 - Create a backup (do a "Save as Grid Bundle") of your user before running this.
